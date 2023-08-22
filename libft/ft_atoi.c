@@ -6,7 +6,7 @@
 /*   By: jmastora <jmastora@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 18:02:01 by jmastora          #+#    #+#             */
-/*   Updated: 2023/05/25 13:55:28 by jmastora         ###   ########.fr       */
+/*   Updated: 2023/08/21 18:29:39 by jmastora         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_atoi(const char *theString)
 	if (theString[i] == '+' || theString[i] == '-')
 	{
 		if (theString[i] == '-')
-			sign = sign * -1;
+			return (-1);
 		i++;
 	}
 	while (theString[i] >= '0' && theString[i] <= '9')

@@ -1,43 +1,55 @@
-SRC_CLIENT	= client.c utils.c
+NAME			=	client
+NAME_BONUS		=	server
+LIBFT			=	libft.a
+DIR_OBJS		=	objs
+SRCS_NAMES		=	client.c
+SRCS_NAMES_B	=	server.c
+OBJS_NAMES		=	${SRCS_NAMES:.c=.o}
+OBJS_NAMES_B	=	${SRCS_NAMES_B:.c=.o}
+SRCS			=	$(SRCS_NAMES)
+SRCS_B			=	$(SRCS_NAMES_B)
+OBJS			=	$(addprefix $(DIR_OBJS)/,$(OBJS_NAMES))
+OBJS_B			=	$(addprefix $(DIR_OBJS)/,$(OBJS_NAMES_B))
+HEAD			=	-Iincludes/ -Ilibft
+CC				=	cc
+CFLAGS			=	-g3 -Wall -Werror -Wextra
 
-SRC_SERVER	= server.c utils.c
+CLIENT_FLAGS	=	-DCOMPILE_CLIENT
+SERVER_FLAGS	=	-DCOMPILE_SERVER
 
-OBJS_SERVER	= $(SRC_SERVER:.c=.o)
+all				:	${NAME} ${NAME_BONUS}
 
-OBJS_CLIENT	= $(SRC_CLIENT:.c=.o)
+$(NAME): $(OBJS)
+	make -C libft
+	mv libft/$(LIBFT) .
+	$(CC) $(CFLAGS) $(CLIENT_FLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	@echo "\033[34;5mclient\033[0m"
 
-CC			=	gcc
+$(OBJS) : $(DIR_OBJS)/%.o : %.c | $(DIR_OBJS)
+	$(CC) $(CFLAGS) $(CLIENT_FLAGS) -c $< -o $@ $(HEAD)
 
-CFLAGS		=	-Wall -Wextra -Werror
+$(NAME_BONUS): $(OBJS_B)
+	make -C libft
+	mv libft/$(LIBFT) .
+	$(CC) $(CFLAGS) $(SERVER_FLAGS) $(OBJS_B) $(LIBFT) -o $(NAME_BONUS)
+	@echo "\033[31;5mserver\033[0m"
 
-SERVER		= server
+$(OBJS_B) : $(DIR_OBJS)/%.o : %.c | $(DIR_OBJS)
+	$(CC) $(CFLAGS) $(SERVER_FLAGS) -c $< -o $@ $(HEAD)
 
-CLIENT		= client
-
-all:		$(SERVER) $(CLIENT)
-
-.c.o :
-			$(CC) $(CFLAGS) -c $< -o $@
-
-$(SERVER):	${OBJS_SERVER}
-			make -C ./ft_printf
-			$(CC) $(CFLAGS) ${OBJS_SERVER} -Lft_printf -lftprintf -o $(SERVER)
-
-$(CLIENT):	${OBJS_CLIENT}	
-			make -C ./ft_printf
-			$(CC) $(CFLAGS) $(OBJS_CLIENT) -Lft_printf -lftprintf -o $(CLIENT)
-
-bonus:	$(SERVER) $(CLIENT)
+$(DIR_OBJS):
+	mkdir -p $(DIR_OBJS)
 
 clean:
-			make -C ./ft_printf clean
-			rm -rf ${OBJS_CLIENT}
-			rm -rf ${OBJS_SERVER}
-			
-fclean:		clean
-			make -C ./ft_printf fclean
-			rm -rf $(SERVER) $(CLIENT)
+	make clean -C libft
+	rm -rf $(DIR_OBJS)
 
-re:			fclean all
+fclean:	clean
+	make fclean -C libft
+	rm -f $(LIBFT)
+	rm -f $(NAME)
+	rm -f $(NAME_BONUS)
 
-.PHONY:		all clean fclean re
+re:	fclean all
+
+.PHONY:	all clean fclean re
