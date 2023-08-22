@@ -75,7 +75,7 @@ void	bit_to_char(int signal, siginfo_t *siginfo, void *null)
 int main() {
 
 struct sigaction	s_sigaction;
-
+	ft_memset(&s_sigaction, 0, sizeof(s_sigaction));
 	ft_printf("%d\n",getpid());
 	s_sigaction.sa_sigaction = bit_to_char;
 	s_sigaction.sa_flags = SA_SIGINFO;

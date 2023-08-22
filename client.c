@@ -16,7 +16,21 @@ void	ft_send_null(int pid)
 		g_total = 0;
 	}
 }
-
+void	ft_send(int	pid, int i)
+{
+	if (i == 1)
+		if (kill(pid, SIGUSR2) == -1)
+		{
+			ft_printf("Mauvais PID");
+			exit(1);
+		}
+	if ( i == 0)
+		if (kill(pid, SIGUSR1) == -1)
+		{
+			ft_printf("Mauvais PID");
+			exit(1);
+		}
+}
 void	send_str(int pid, char *str)
 {
 	int		bit;
@@ -27,9 +41,9 @@ void	send_str(int pid, char *str)
 	while (bit >= 0)
 	{
 		if (str[i] & (1 << bit))
-			kill(pid, SIGUSR2);
+			ft_send(pid, 1);
 		else
-			kill(pid, SIGUSR1);
+			ft_send(pid, 0);
 		bit--;
 		if(bit < 0 && str[++i])
 			bit = 7;
@@ -103,7 +117,7 @@ int	main(int argc, char **argv)
 {
 	//
 struct sigaction	s_sigaction;
-
+	ft_memset(&s_sigaction, 0, sizeof(s_sigaction));
 	s_sigaction.sa_flags = SA_SIGINFO;
 	s_sigaction.sa_sigaction = handler;
 	sigaction(SIGUSR1, &s_sigaction, 0);
