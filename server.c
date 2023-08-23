@@ -30,13 +30,14 @@ void	ft_build_msg(char c , siginfo_t *siginfo)
 	str = ft_realloc(str, size + 2);
 	if (c == '\0')
 	{
-		ft_printf("[%s]\n", str);
+		ft_printf("%s\n", str);
 		kill(siginfo->si_pid, SIGUSR1);
 		free(str);
 		str = NULL;
 		return ;
 	}
 	str[size] = c;
+	dprintf(2, "{%s}", str);
 	size++;
 	str[size] = '\0';
 }
@@ -76,7 +77,7 @@ int main() {
 
 struct sigaction	s_sigaction;
 	ft_memset(&s_sigaction, 0, sizeof(s_sigaction));
-	ft_printf("%d\n",getpid());
+	ft_printf("PID = %d\n",getpid());
 	s_sigaction.sa_sigaction = bit_to_char;
 	s_sigaction.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &s_sigaction, NULL);
