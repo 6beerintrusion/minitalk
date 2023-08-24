@@ -24,9 +24,9 @@ void	ft_build_msg(char c , siginfo_t *siginfo)
 
 	size_t size;
 
-	size = ft_strlen(str);
-	//if (!str)
+	//if (!str || !*str)
 	//	str = ft_calloc(sizeof(char), 1);
+	size = ft_strlen(str);
 	str = ft_realloc(str, size + 2);
 	if (c == '\0')
 	{
@@ -37,7 +37,6 @@ void	ft_build_msg(char c , siginfo_t *siginfo)
 		return ;
 	}
 	str[size] = c;
-	dprintf(2, "{%s}", str);
 	size++;
 	str[size] = '\0';
 }
@@ -84,7 +83,7 @@ struct sigaction	s_sigaction;
 	sigaction(SIGUSR2, &s_sigaction, NULL);
 	while (1)
 	{
-		pause();
+		usleep(10);
 	}
 	return (0);
 }

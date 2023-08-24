@@ -12,7 +12,7 @@ void	ft_send_null(int pid)
 		kill(pid, SIGUSR1);
 		bit--;
 		while (!g_total)
-			pause();
+			usleep(10);
 		g_total = 0;
 	}
 }
@@ -48,7 +48,7 @@ void	send_str(int pid, char *str)
 		if(bit < 0 && str[++i])
 			bit = 7;
 		while (!g_total)
-			pause();
+			usleep(10);
 		g_total = 0;
 		if (bit < 0 && !str[i])
 		{
